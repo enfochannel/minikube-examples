@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kube
+  labels:
+    app: hello-kube
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-kube
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello-kube
+        version: v1
+    spec:
+      containers:
+      - name: hello-kube
+        image: hello-kube:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: dev-service
+  labels:
+    app: hello-kube
+    version: v1
+    env: dev
+  namespace: dev
+spec: 
+  ports: 
+    - 
+      nodePort: 32056
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
+  type: LoadBalancer
+  selector:
+    app: hello-kube
+    version: v1

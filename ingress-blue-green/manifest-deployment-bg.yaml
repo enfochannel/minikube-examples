@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kube-green
+  labels:
+    app: hello-kube
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-kube
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello-kube
+        version: v2
+    spec:
+      containers:
+      - name: hello-kube
+        image: hello-kube:v2
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m

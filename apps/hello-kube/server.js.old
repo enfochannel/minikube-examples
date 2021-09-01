@@ -1,0 +1,12 @@
+var http = require('http');
+
+var handleRequest = function(request, response) {
+        console.log('Received request for URL: ' + request.url);
+        console.log('\x1b[36m%s\x1b[0m', 'I am cyan');
+	response.writeHead(200);
+	response.end('Hello Kubernetes World!');
+};
+
+var www = http.createServer(handleRequest);
+
+www.listen(8080);
